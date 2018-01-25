@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Search Page</title>
+    <script src="/static/js/jquery-1.10.2.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet " href="/static/css/bootstrap.min.css ">
+    <link rel="stylesheet " href="/static/css/buttons.css">
+    <style type="text/css">
+        ul {
+            font-size: 20px;
+        }
+        .top-panel{
+            position: relative;
+            background-color: #6746c3;
+            padding: 30px;
+            padding-left: 140px;
+            border-bottom: 1px solid #ebebeb;
+        }
+        .btn-info {
+            color: #fff;
+            background-color: transparent;
+            border-color: transparent;
+        }
+        .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open .dropdown-toggle.btn-info {
+                box-shadow: inset 0 0 0 rgba(0,0,0,0);
+            background-color: transparent;
+            border-color: transparent;
+            border-bottom: 3px solid #cfd8dc;
+            color: #cfd8dc;
+            font-weight: bold;
+        }
+        .search-btn > svg{
+            width: 24px;
+            height:24px;
+            fill: #fff;
+        }
+        .logo-image{
+            width: 120px;
+            position: absolute;
+            left: 10px;
+            top: 30px;
+        }
+        .top-content{
+            font-size: 24px;
+            color:#005ecb;
+        }
+        .bottom-content{
+            font-size: 12px;
+            color:#777;
+            margin-left:5px;
+        }
+        ul{
+            list-style: none;
+        }
+        .top-content > p{
+            margin:0px;
+        }
+        .bottom-content > p{
+            margin: 0px;
+            word-break: break-all;
+        }
+        .bottom-panel{
+            padding-left: 35px;
+        }
+        #search-result{
+            padding-left:35px;
+            color:#777;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="top-panel">
+    <img class="logo-image" src="/static/logo_blank.png">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <!-- /btn-group -->
+                <input type="text" class="form-control" id="search" placeholder="Searching...">
+                <span class="input-group-btn">
+                    <button class="button button-plain button-borderless button-circle search-btn" id="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+                    </button>
+                </span>
+            </div>
+            <!-- /input-group -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+     <div class="btn-group" data-toggle="buttons" id="search-label">
+        <label class="btn btn-info active" >
+            <input  type="radio" name="url-radio" value="URL"> URL
+        </label>
+        <label class="btn btn-info">
+            <input  type="radio" name="ip-radio" value="IP"> IP
+        </label>
+        <label class="btn btn-info">
+            <input  type="radio" name="domain-radio" value="DomainName"> DomainName
+        </label>
+         <label class="btn btn-info">
+            <input  type="radio" name="hash-radio" value="FileHash"> FileHash
+        </label>
+    </div>
+</div>
+<div class="bottom-panel">
+    <label id="search-result"></label>
+    <ul class="list-group" style="margin-top:30px;" id="result-list">
+        <ul class="list-item">
+            <li class="top-content">
+                <p >baidu.com</p>
+            </li>
+            <li class="bottom-content">
+                <p>FileHash:123kjasdhjxoaijsk</p>
+                <p>IP:123kjasdhjxoaijsk</p>
+                <p>DomainName:123kjasdhjxoaijsk</p>
+            </li>
+        </ul>
+
+    </ul>
+</div>
+    <script>
+        $(function() {
+            var content='URL';
+            $('#search-label label').on('click', function () {
+            content=$(this).children().val();
+
+        });
+            $('#search-btn').click(function() {
+
+                $('#result-list').empty();
+                var field = "url";
+                if (content == "IP") {
+                    field = "ip";
+                } else if (content == "FileHash") {
+                    field = "filehash";
+                } else if (content == "DomainName") {
+                    field = "domainName";
+                }
+                $.post("/search", {
+                        "field": field,
+                        "query": $('#search').val()
+                    },
+                    function(documents) {
+                        $Group = $('#result-list');
+
+                        $('#search-result').html("Search Count:" + documents.length.toString());
+
+                        for (var i in documents) {
+                            var document = documents[i];
+                            $Group.append(
+                                `<ul class="list-item"><li class="top-content"><p >${document["url"]}</p></li><li class="bottom-content"><p>FileHash:${document["filehash"]}</p><p>IP:${document["ip"]}</p><p>DomainName:${document["domainName"]}</p></li></ul>`
+                                //`<li><divclass='panelpanel-default'><divclass="panel-heading">信息</div><divclass="panel-body"><ulclass="list-group"style="margin-top:30px;"id="list-group"><ul><li><p>URL</p><p>${document["url"]}</p></li><li><p>域名</p><p>${document["domainName"]}</p></li><li><p>IP</p><p>${document["ip"]}</p></li><li><p>文件哈希值</p><p>${document["filehash"]}</p></li></ul></ul></div></div></li>`
+                            );
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+</body>
+<html>

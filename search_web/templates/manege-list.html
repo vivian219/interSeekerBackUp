@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Semantic UI</title>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="static/semantic/dist/semantic.min.css">
+	<script type="text/javascript" src="static/semantic/dist/semantic.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.semanticui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/list.css">
+	<style type="text/css">
+		.list-hidden {
+            display: none;
+            color: #2B2B2B;
+        }
+        .bold {
+        	font-weight: bold;
+        	font-style: italic;
+        }
+	</style>
+</head>
+<body>
+<div class="ui inverted segment">
+  <div class="ui inverted secondary menu">
+  	<div class="item">
+	   <img  src="static/images/icon1.png">
+	   <a href="index.html"><span style="font-size: medium;">&nbsp;IntelTrackr</span> </a>
+	</div>
+    <a class="item active">
+      Info List
+    </a>
+    <a class="item" href="actor-list.html">
+      Actor List
+    </a>
+    <a class="item" href="audit.html">
+      Verify
+    </a>
+    <div class="right menu">
+	  <div class="item">
+		<p style="font-family: '微软雅黑'; font-style: italic;">Administrator</p>
+	  </div>
+	  <a class="ui item" onclick="toggleLogin()">
+	    Logout
+	  </a>
+	</div>
+  </div>
+</div>
+<div class="ui container">
+	<!-- <div class="ui grid"> -->
+	<div class="ui hidden divider"></div>
+	<table id="example" class="display ui celled table selectable" cellspacing="0" width="100%">
+
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>情报标题</th>
+                <th>发布日期</th>
+                <th>情报来源</th>
+                <th>状态</th>
+                <th>TLP</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>序号</th>
+                <th>情报标题</th>
+                <th>发布日期</th>
+                <th>情报来源</th>
+                <th>状态</th>
+                <th>TLP</th>
+                <th>操作</th>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="ui coupled longer details large modal">
+      <i class="close icon"></i>
+      <div class="header">
+      DETAILS
+      </div>
+      <div class="scrolling content">
+        <div class="description ui grid">
+          <div class="ui form" onchange="detailModified()">
+            <h3><i class="tags icon"></i><span id="m-title"></span></h3>
+            <p>情报来源:　<span class="ui tiny icon transparent input">
+                  <input type="text" spellcheck="false" id="m-from" >
+                </span>
+            发布日期:　<span id="m-cdate"></span></br>
+            MD5:　<span id="m-md5"></span></br></p>
+            <div class="ui divider"></div>
+            <div>
+                状态:　<div class="ui label inline-div">已更新</div>　　
+                TLP:　　
+                <div class="ui inline dropdown" id="TLPdropdown">
+                  <div class="text ui label" id="m-tlp">
+                  </div>
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                    <div data-value="1" class="item">不可共享
+                    </div>
+                    <div data-value="2" class="item">组织内共享
+                    </div>
+                    <div data-value="3" class="item">组织外限制共享
+                    </div>
+                    <div data-value="4" class="item">广泛共享
+                    </div>
+                  </div>
+                </div>　
+            </div>
+            <div class="ui divider"></div>
+            <div>文档标签:　<div class="inline-div" id="labellist">
+                    <a class="ui label"><span>公开</span><i class="delete icon" onclick="delLabel(this)"></i></a>
+                    <a class="ui label">安全漏洞<i class="delete icon" onclick="delLabel(this)"></i></a>
+                </div>
+                <a class="ui gray label" onclick="addLabel()"><i class="plus icon"></i>添加</a>
+                <div class="ui mini icon transparent input">
+                  <input type="text" spellcheck="false" id="newlabel" placeholder="label...">
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <h5><i class="file text outline icon"></i>文档摘要</h5>
+            <div class="field">
+              <textarea spellcheck="false" id="m-abstract"></textarea>
+            </div>
+
+            <h5><i class="linkify icon"></i>文档URL</h5>
+            <div class="ui link list" id="m-urls"></div>
+
+            <h5><i class="file text outline icon"></i>情报描述</h5>
+            <div class="field">
+              <textarea spellcheck="false" id="m-desc"></textarea>
+            </div>
+            
+            <h5><i class="spy icon"></i>相关Actors</h5>
+			<button class="ui basic button" onclick="toggleAddActor()">
+				<i class="plus icon"></i>
+				  添加actor
+			</button>
+			<table id="Actor-table" class="display ui celled table" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <!--<th>First Sighting</th>-->
+                        <!--<th>TLP</th>-->
+                        <!--<th>Criticality</th>-->
+                        <!--<th>Classification Family</th>-->
+                    </tr>
+                </thead>
+            </table>
+           
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui green right pointing label" id="save-tip">
+
+        </div>
+        <div class="ui secondary disabled right labeled icon button" id="submit-change" onclick="detailSaved()">
+          保存
+          <i class="checkmark icon"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="login ui tiny modal">
+	    <div class="content">
+	        <div class="ui middle aligned center aligned grid">
+	          <div class="column">
+	            <h2 class="ui teal header">
+	              <div class="content">
+	                Log-in to your account
+	              </div>
+	            </h2>
+	            <form class="ui large form">
+	              <div class="ui segment">
+	                <div class="field">
+	                  <div class="ui left icon input">
+	                    <i class="user icon"></i>
+	                    <input type="text" name="email" spellcheck="false" placeholder="E-mail address">
+	                  </div>
+	                </div>
+	                <div class="field">
+	                  <div class="ui left icon input">
+	                    <i class="lock icon"></i>
+	                    <input type="password" name="password" placeholder="Password">
+	                  </div>
+	                </div>
+	                <div class="ui fluid large teal submit button">Login</div>
+	              </div>
+
+	              <div class="ui error message"></div>
+
+	            </form>
+
+	            <div class="ui message">
+	              New to us? <a href="#">Sign Up</a>
+	            </div>
+	          </div>
+	        </div>
+	    </div>
+    </div>
+
+    <div class="ui coupled newactor longer modal">
+	  <div class="content">
+	  	<span class="bold">待添加Actor:　　</span>
+	  	<span id="nname">None</span>　　
+	  	<span id="ndate">None</span>
+	  	<h5><i class="database icon"></i>添加已有actor</h5>
+	    <div class="ui actor search right floated">
+			<div class="ui left icon input">
+				<input class="prompt" type="text" placeholder="Search Actor">
+				<i class="spy icon"></i>
+			</div>
+		</div>
+		<h5><i class="plus icon"></i>添加新增actor</h5>
+		<!-- <p>actor名称:　<span class="ui tiny icon transparent input">
+                  <input type="text" spellcheck="false" id="n-name">
+                </span>
+            观测日期:　<span class="ui tiny icon transparent input">
+                  <input id="n-date" type="date">
+                </span></br>
+            Criticality:　<span class="ui tiny icon transparent input">
+                  <input type="text" spellcheck="false" id="n-crit">
+                </span></span></br></p>
+        actor描述:
+        <div class="field" >
+            <textarea spellcheck="false" rows="5" cols="60" id="n-desc"></textarea>
+        </div> --><!-- selectNewActor() -->
+        <button class="ui basic button" onclick="toggleAddActorForm()">
+    		  <i class="icon spy"></i>
+    		  NEW Actor...
+    		</button>
+	  </div>
+	  <div class="actions">
+	    <div class="ui black deny button" onclick="toggleDetail()">
+	      取消
+	    </div>
+	    <div class="ui positive right labeled icon button" onclick="linkActor()">
+	      确定
+	      <i class="checkmark icon"></i>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+
+<div class="ui coupled newactorform longer large modal">
+  <div class="header">
+  DETAILS
+  </div>
+  <div class="scrolling content">
+    <div class="description ui grid">
+      <div class="ui form">
+        <h3><i class="tags icon"></i><span id="title" class="ui long-input tiny icon transparent input black">
+              <input type="text" spellcheck="false" id="a-title" >
+            </span></h3>
+        <p>威胁程度:　<span class="ui tiny icon transparent input">
+              <input type="text" spellcheck="false" id="a-crit">
+            </span>
+        观测日期:　<span class="ui tiny icon transparent input">
+              <input type="text" spellcheck="false" id="a-cdate" >
+            </span></br>
+        <div class="ui divider"></div>
+        <div>
+            <!-- 状态:　<div class="ui label inline-div">已更新</div>　　 -->
+            TLP:
+            <div class="ui inline dropdown" id="tdropdown">
+              <div class="text ui label" id="a-tlp">
+              </div>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div data-value="1" class="item">不可共享
+                </div>
+                <div data-value="2" class="item">组织内共享
+                </div>
+                <div data-value="3" class="item">组织外限制共享
+                </div>
+                <div data-value="4" class="item">广泛共享
+                </div>
+              </div>
+            </div>　
+
+            　　Classification Family:
+            <div class="ui inline dropdown" id="cfdropdown">
+              <div class="text ui label" id="a-cf">
+              </div>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div data-value="1" class="item">Actors
+                </div>
+                <div data-value="2" class="item">Attack
+                </div>
+                <div data-value="3" class="item">Infrastructure
+                </div>
+                <div data-value="4" class="item">Intel
+                </div>
+                <div data-value="4" class="item">Malicious
+                </div>
+              </div>
+            </div>
+
+            　　Classification ID:
+            <span class="ui tiny icon transparent input">
+              <input type="text" spellcheck="false" id="a-ci" value="Black Hat">
+            </span>
+    <div class="ui fitted hidden divider"></div><div class="ui fitted hidden divider"></div>
+    Actor Types:
+            <div class="ui inline dropdown" id="atpdropdown">
+              <div class="text ui label" id="a-at" >
+              </div>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div data-value="1" class="item">Criminal
+                </div>
+                <div data-value="2" class="item">Hacktivist
+                </div>
+                <div data-value="3" class="item">Nation State
+                </div>
+              </div>
+            </div>
+
+            　　Motivations:
+            <div class="ui inline dropdown" id="mtvdropdown">
+              <div class="text ui label" id="a-m">
+              </div>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div data-value="1" class="item">Unknown
+                </div>
+                <div data-value="2" class="item">Deny
+                </div>
+                <div data-value="3" class="item">degrade
+                </div>
+                <div data-value="4" class="item">disrupt
+                </div>
+                <div data-value="4" class="item">destroy
+                </div>
+                <div data-value="4" class="item">manipulate info or info systems
+                </div>
+                <div data-value="4" class="item">Espionage
+                </div>
+                <div data-value="4" class="item">Extortion
+                </div>
+                <div data-value="4" class="item">Trading information for competitive advantage
+                </div>
+                <div data-value="4" class="item">Other
+                </div>
+              </div>
+            </div>
+
+        </div>
+        <div class="ui divider"></div>
+        <!-- <div>文档标签:　<div class="inline-div" id="labellist">
+                <a class="ui label"><span>公开</span><i class="delete icon" onclick="delLabel(this)"></i></a>
+                <a class="ui label">安全漏洞<i class="delete icon" onclick="delLabel(this)"></i></a>
+            </div>
+            <a class="ui gray label" onclick="addLabel()"><i class="plus icon"></i>添加</a>
+            <div class="ui mini icon transparent input">
+              <input type="text" spellcheck="false" id="newlabel" placeholder="label...">
+            </div>
+        </div> -->
+        <!-- <div class="ui divider"></div> -->
+        <h5><i class="file text outline icon"></i>Actor描述</h5>
+        <div class="field">
+          <textarea spellcheck="false" id="ai-abstract"></textarea>
+        </div>
+        <div class="ui divider"></div>
+        Aliases: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-al" >
+        </span>
+        <p></p>
+        Communication Addresses: <span class="ui long-input tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-cad" >
+        </span>
+        <p></p>
+        Financial Accounts: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-fa" >
+        </span>
+        Country Affiliations: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-ca" >
+        </span><p></p>
+  Known Targets: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-kt" >
+        </span>
+  Actor Suspected Point of Origin: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-aspo" >
+        </span><p></p>
+        Infrastructure IPv4s: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-ii" >
+        </span>
+        Infrastructure FQDNs: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-if" >
+        </span><p></p>
+  infrastructure_action: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-ia" >
+        </span>
+        infrastructure_ownership: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-io" >
+        </span><p></p>
+        infrastructure_status: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-is" >
+        </span>
+  infrastructure_types: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-it" >
+        </span><p></p>
+        detection_rules: <span class="ui tiny icon transparent input">
+            <input type="text" class="bold" spellcheck="false" id="ai-dr" >
+        </span>
+
+  
+
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button" onclick="toggleAddActor()">
+      取消
+    </div>
+    <div class="ui positive right labeled icon button" onclick="confirmNewActor()">
+      确定
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+
+	$('.coupled.modal')
+	  .modal({
+	    allowMultiple: false
+	  })
+	;
+	var keyword = '';
+    var urlinfo = window.location.href;//获取url
+    if(urlinfo.indexOf("?")!=-1){
+        keyword = decodeURI(urlinfo.split("?")[1].split("=")[1]);//拆分url得到”=”后面的参数
+    }
+
+    var table = $('#example').DataTable(
+     {
+        "processing": false,
+        "aLengthMenu": [[10, 25, 50, -1], ["10条", "25条", "50条", "All"]],
+        "serverSide": true,
+        "ordering": false, // 禁止排序 
+        "bAutoWidth": false,
+        "ajax": {
+            url: "/api",
+            type: 'POST',
+            data: function ( d ) {
+                if(keyword!==''){
+        		    d['search']['value'] = keyword;
+        		    keyword = '';
+        		}
+        	}
+        },
+        // dt.Columns["column_name"].SetOrdianl(0);
+        "aoColumnDefs":[
+        {"aTargets":[0],sWidth:"8%"},
+        // ,"mRender":function(data, type, full, meta){  
+        //     return meta.row + 1 + meta.settings._iDisplayStart;  }
+          // },
+        {"aTargets":[1],sWidth:"25%"},
+        {"aTargets":[2],sWidth:"12%"},
+        {"aTargets":[3],sWidth:"12%",
+        // "mRender":function(data,type,full){
+        //              return "<a href=\"http://www.baidu.com/\" target=\"_\">"+data+"</a>    "}
+                    },
+        {"aTargets":[4],sWidth:"12%"},
+        {"aTargets":[5],sWidth:"12%"},
+        {"aTargets":[6],sWidth:"20%","className":"center aligned","mRender":function(data,type,full){
+                      return "<div class=\"ui tiny button\" onclick=\"readOnlyDetails('"+full[0]+"');\" >详情</div>";}
+                      
+                    }]
+    }
+    );
+
+    $("#example tbody").on("click",".edit-btn",function(){
+           var tds=$(this).parents("tr").children();
+           $.each(tds, function(i,val){
+               var jqob=$(val);
+               if(i < 1 || jqob.has('.button').length ){return true;}//跳过第1项 序号,按钮
+               var txt=jqob.text();
+               var put=$("<div class=\"ui transparent input full-width\"><input class=\"full-width\" type=\"text\" ></div>");
+               put.children('input').val(txt);
+               jqob.html(put);
+           });
+           $(this).html("保存");
+           $(this).parents("tr").toggleClass("warning");
+           $(this).toggleClass("edit-btn",false);
+           $(this).toggleClass("save-btn",true);
+    });
+
+
+    $("#example tbody").on("click",".save-btn",function(){
+           var row=table.row($(this).parents("tr"));
+           var tds=$(this).parents("tr").children();
+           $.each(tds, function(i,val){
+               var jqob=$(val);
+
+               //把input变为字符串
+               if(!jqob.has('.button').length && i>0){
+                   var txt=jqob.find("input").val();
+                   jqob.html(txt);
+                   table.cell(jqob).data(txt);//修改DataTables对象的数据
+               }
+           });
+           var data=row.data();
+           // $.ajax({
+           //     "url":"/example/resources/user_share/inline_edit_no_plugin/edit.php",
+           //     "data":data,
+           //     "type":"post",
+           //     "error":function(){
+           //         alert("服务器未正常响应，请重试");
+           //     },
+           //     "success":function(response){
+           //         alert(response);
+           //     }
+           // });
+           alert(data);
+           $(this).html("编辑");
+           $(this).parents("tr").toggleClass("warning");
+           $(this).toggleClass("edit-btn",true);
+           $(this).toggleClass("save-btn",false);
+    });
+} );
+
+function readOnlyDetails(data){
+
+
+    $.ajax({
+      type: 'POST',
+      url: "/api/details",
+      data: {"md5":data},
+      success: function(data){
+        assignDetails(data);
+      },
+      dataType: "json"
+    });    
+
+
+}
+// open login modal
+function toggleLogin() {
+     $('.login.ui.tiny.modal')
+      .modal('show')
+    ;
+}
+function toggleUrlList(obj) {
+    $(obj).toggleClass('minus');
+    $(obj).toggleClass('plus');
+    $(obj).parent().parent('div').next().toggle();
+}
+function detailModified() {
+  $('#submit-change').toggleClass("disabled",false);
+  $('#save-tip').hide();
+}
+function detailSaved() {
+  $('#submit-change').toggleClass("disabled",true);
+  $('#save-tip').text("数据修改成功！");
+  $('#save-tip').show();
+
+  postDetails();
+}
+
+function addLabel() {
+
+  $('#labellist').append("<a class=\"ui label\"><span>"+$('#newlabel').val()+"</span><i class=\"delete icon\" onclick=\"delLabel(this)\"></i></a>");
+  $('#newlabel').val("");
+  detailModified();
+}
+
+function delLabel(obj) {
+  $(obj).parent('a').remove();
+  detailModified();
+}
+
+function tlpchange(val) {
+  var obj = $('#m-tlp');
+  switch(val){
+    case "不可共享":
+      obj.toggleClass("red",true);
+      obj.toggleClass("orange",false);
+      obj.toggleClass("green",false);
+      obj.toggleClass("white",false); break;
+    case "组织内共享":
+      obj.toggleClass("red",false);
+      obj.toggleClass("orange",true);
+      obj.toggleClass("green",false);
+      obj.toggleClass("white",false); break;
+    case "组织外限制共享":
+      obj.toggleClass("red",false);
+      obj.toggleClass("orange",false);
+      obj.toggleClass("green",true);
+      obj.toggleClass("white",false); break;
+    case "广泛共享":
+      obj.toggleClass("red",false);
+      obj.toggleClass("orange",false);
+      obj.toggleClass("green",false);
+      obj.toggleClass("white",true); break;
+    
+  }
+}
+
+var nowReportMd5 ;
+function assignDetails(data){
+    $('#m-title').text(data.report[1]);
+    $('#m-from').val(data.report[3]);
+    $('#m-cdate').text(data.report[2]);
+    $('#m-md5').text(data.report[0]);
+    nowReportMd5 = data.report[0];
+    $('#m-status').text(data.report[4]);
+    var tlp = "";
+    switch(data.report[5]){
+        case "0":
+          tlp = "不可共享"; break;
+        case "1":
+          tlp = "组织内共享"; break;
+        case "2":
+          tlp = "组织外限制共享"; break;
+        case "3":
+          tlp = "广泛共享"; break;
+        default:
+          tlp = "暂无状态";break;
+    }
+    // $('#m-tlp').text(tlp);
+    $('#TLPdropdown')
+	  .dropdown('set selected',"2")
+	;
+	tlpchange(data.report[5]);
+    $('#m-tlp').attr("val",data.report[5]);
+
+
+    $('#labellist').empty();
+    var tags = data.labels.split(';');
+    for(item in tags){
+       $('#labellist').append('<a class="ui label"><span>'+tags[item]+'</span><i class="delete icon" onclick="delLabel(this)"></i></a>'); 
+    }
+    var abs = data.abstract!=null? data.abstract : "暂无摘要";
+    var des = data.desc!=null? data.desc : "暂无描述";
+    $('#m-abstract').val(abs);
+    $('#m-desc').val(des);
+
+    assignUrls(data.urls);
+
+    assignActorList(data.actors);
+
+    $('#save-tip').hide();
+    
+    toggleDetail();
+
+    $('#TLPdropdown')
+      .dropdown({
+        onChange: function(val, text, choice) {
+          tlpchange(val);
+        }
+      })
+    ;
+}
+function toggleDetail() {
+	$('.longer.details.modal')
+      .modal({closable: false})
+      .modal('show')
+    ;
+}
+var table1
+// actor list 构造
+function assignActorList(actors) {
+  if(table1){
+    table1.clear();
+  }
+  
+	table1 = $('#Actor-table').DataTable(
+     {
+        "destroy": true,
+        "data": actors,
+        "bFilter": false,    //去掉搜索框方法
+        "paging": false,
+        "bLengthChange": false,   //去掉每页显示多少条数据方法
+        "ordering": false, // 禁止排序
+        // "ajax": {
+        //     url: "http://localhost//test/api.php",
+        //     type: 'POST'
+        // }
+        // "aoColumnDefs":[
+        	// {"aTargets":[-1],"className":"center aligned","mRender":function(data,type,full){
+         //                return '<div class="ui tiny button" onclick="">删除</div>';
+         //            }}
+         //            ]
+    }
+    );
+}
+// IOC列表构造
+function assignUrls(urls){
+	var columns = [
+                    "md5",
+                    "domains","ipv4"
+                    // ,"actors","reports"
+                    ];
+    var htmlcode = "";
+    for(item in urls){
+        
+        htmlcode += '<div class="item"> \
+                  <a><i class="plus circle icon" onclick="toggleUrlList(this)"></i></a> \
+                  <a class="item" href="'+urls[item].url+'" target="_">'+urls[item].url+'</a> \
+              </div>'; 
+        htmlcode += '<table class="ui celled compact padded table list-hidden"><thead><tr><th>IOC_MD5</th><th>IOC_DOMAIN</th><th>IOC_IPV4</th><th>Related Actors</th><th>Related Reports</th></tr></thead><tbody><tr>';
+        
+        // htmlcode += '<td><div class="ui link list"><a class="item">'+data.urls[item]['md5']+'</a></div></td>';
+        for(var i=0; i<columns.length; i+=1){
+            htmlcode += '<td><div class="ui link list">';
+            // console.log(data.urls);
+            var arr = str2Array(urls[item][columns[i]]);
+            for(j in arr){
+                // console.log(data.urls[item][columns[i]][j]);
+                htmlcode += '<a class="item">'+arr[j]+'</a>';
+            }
+            htmlcode += '</div></td>';
+        }
+        htmlcode += '<td><div class="ui link list"><a class="item">'+urls[item]['actors']+'</a></div></td>';
+        htmlcode += '<td><div class="ui link list"><a class="item">'+urls[item]['reports']+'</a></div></td>';
+        htmlcode += '</tr></tbody></table>\n';
+    }
+    $('#m-urls').empty();
+    $('#m-urls').append(htmlcode);
+
+}
+function str2Array(origin){
+	if(origin == null || origin == '[]')
+		return new Array("暂无");
+	var str  =  origin.replace(/[\s+|\]|\[|\']/g,"");    
+	var strArray = str.split(',');
+	return strArray;
+}
+
+function toggleAddActor(){
+	$('.newactor.modal')
+	  .modal({closable: false})
+      .modal('show')
+    ;
+    searchActor();
+}
+function toggleAddActorForm(){
+  clearModalforadd();
+  $('.newactorform.modal')
+    .modal({closable: false})
+      .modal('show')
+    ;
+}
+
+var newActor = {
+	option: 0,
+	id: 0
+};
+// actor search
+function searchActor(){
+	$('.ui.actor.search')
+	  .search({
+	    apiSettings: {
+	      url: '/actor/details/search/items?q={query}'
+	    },
+	    fields: {
+	      results : 'items',
+	      title   : 'name',
+	      url     : 'javascript:void(0)',
+	      description     : 'first_sighting',
+	    },
+	    onSelect: function (result, response) {
+	    	$('#nname').text(result.name);
+	    	$('#ndate').text(result.first_sighting);
+	    	$('#nname').attr("option","LINK");
+        $('#nname').attr("TLP",result.tlp);
+        $('#nname').attr("Criticality",result.criticality);
+        $('#nname').attr("classification_family",result.classification_family);
+	    },
+	    minCharacters : 5,
+	    maxResults : 5
+	  })
+	;
+}
+// 提交修改
+function postDetails() {
+	var data = {}
+
+	var report = [];
+	report[0] = $('#m-md5').text();
+	report[1] = $('#m-title').text();
+	report[2] = $('#m-cdate').text();
+	report[3] = $('#m-from').val();
+	report[4] = $('#m-status').text();
+	report[5] = $('#m-tlp').attr('val');
+
+	var labels = "";
+	var children = $('#labellist').children('a');
+	console.log(children);
+	for(var i=0; i<children.length; i++){
+		if(labels.length != 0)
+			labels+=";"; 
+		labels += $(children[i]).children('span').text();
+	}
+
+	var abstract = $('#m-abstract').val();
+    var description = $('#m-desc').val();
+
+    var actors = "20171219";
+
+    data['report'] = report;
+    data['labels'] = labels;
+    data['abstract'] = abstract;
+    data['desc'] = description;
+    data['actors'] = actors;
+
+    $.ajax({
+      type: 'POST',
+      url: "/api/details/post",
+      data: {"data":JSON.stringify(data)},
+      success: function(data){
+        alert("ok");
+      }
+    });    
+}
+// 从url中获取参数
+function getUrlParam(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	var r = window.location.search.substr(1).match(reg); //匹配目标参数
+	if (r!=null) return unescape(r[2]); return null; //返回参数值
+} 
+// ------------------newactor Modal-----------------------
+
+function linkActor(){
+    var option = $('#nname').attr("option");
+    var data = {};
+    var newrow;
+    if(option=="LINK"){
+        data["report_md5"] = nowReportMd5;
+        data["actor_name"] = $('#nname').text();
+         $.ajax({
+           type: 'POST',
+           url: "/link",
+           data: {"data":JSON.stringify(data)},
+           success: function(data){
+             alert("ok");
+           }
+         });
+        newrow = [$('#nname').text()];
+//            ,$('#ndate').text(),$('#nname').attr("TLP"),$('#nname').attr("Criticality"),$('#nname').attr("classification_family")];
+    }else{
+        data["report_md5"] = nowReportMd5;
+        data["actor"] = actordata;
+         $.ajax({
+           type: 'POST',
+           url: "/newlink",
+           data: {"data":JSON.stringify(data)},
+           success: function(data){
+             alert("ok");
+           }
+         });
+        console.log(data["actor"]);
+        newrow = [actordata['name']];
+//            ,actordata['first_sighting'],
+//        actordata['tlp'],actordata['criticality'],actordata['classification_family']];
+    }
+    table1.row.add(newrow).draw(); 
+    toggleDetail();
+}
+
+// 
+//-------------------newactorform Modal----------------------
+var actordata;
+function confirmNewActor(){
+    actordata = {};
+    actordata["name"] = $('#a-title').val();
+    actordata["first_sighting"] = $('#a-cdate').val();
+    actordata["description"] = $('#ai-abstract').val();
+    actordata["criticality"] = $('#a-crit').val();
+    actordata["classification_family"] = $('#a-cf').text();
+    actordata["classification_id"] = $('#a-ci').val();
+    actordata["tlp"] = $('#a-tlp').text();
+    actordata["actor_types"] = $('#a-at').text();
+    actordata["motivations"] = $('#a-m').text();
+    actordata["aliases"] = $('#ai-al').val();
+    actordata["communication_addresses"] = $('#ai-cad').val();
+    actordata["financial_accounts"] = $('#ai-fa').val();
+    actordata["country_affiliations"] = $('#ai-ca').val();
+    actordata["known_targets"] = $('#ai-kt').val();
+    actordata["actor_suspected_point_of_origin"] = $('#ai-aspo').val();
+    actordata["infrastructure_ipv4s"] = $('#ai-ii').val();
+    actordata["infrastructure_fqdns"] = $('#ai-if').val();
+    actordata["infrastructure_action"] = $('#ai-ia').val();
+    actordata["infrastructure_ownership"] = $('#ai-io').val();
+    actordata["infrastructure_status"] = $('#ai-is').val();
+    actordata["infrastructure_types"] = $('#ai-it').val();
+    actordata["detection_rules"] = $('#ai-dr').val();
+
+    toggleAddActor();
+    selectNewActor(actordata["name"],actordata["first_sighting"])
+}
+// 选定当前actor
+function selectNewActor(name, first_sighting) {
+
+    $('#nname').text(name);
+    $('#ndate').text(first_sighting);
+    $('#nname').attr("option","NEW");
+
+}
+
+function clearModalforadd(){
+  $("[id^='ai-']").val("");
+  $("#a-title").val("");
+  $("#a-crit").val("");
+  $("#a-cdate").val("");
+  $("#aid").hide();
+  $("#a-tlp").text(""); $("#a-cf").text("");
+  $("#a-at").text("");  $("#a-m").text("");
+  $("#a-ci").val("");   $('#ai_ia').val("");
+  $('#ai_io').val("");
+  $('#ai_is').val("");
+  $('#ai_it').val("");
+  $('#ai_dr').val("");
+
+    $('#tdropdown')
+      .dropdown()
+    ;
+    $('#cfdropdown')
+      .dropdown()
+    ;
+    $('#atpdropdown')
+      .dropdown()
+    ;
+    $('#mtvdropdown')
+      .dropdown()
+    ;
+}
+//
+</script>
+</body>
+</html>

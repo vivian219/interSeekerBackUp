@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Semantic UI</title>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="static/semantic/dist/semantic.min.css">
+	<script type="text/javascript" src="static/semantic/dist/semantic.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.semanticui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/list.css">
+	<style type="text/css">
+		.list-hidden {
+            display: none;
+            color: #2B2B2B;
+        }
+	</style>
+</head>
+<body>
+<div class="ui inverted segment">
+  <div class="ui inverted secondary menu">
+  	<div class="item" >
+        <img  src="static/images/icon1.png">
+	   <a href="index.html"><span style="font-size: medium;">&nbsp;IntelTrackr</span> </a>
+	</div>
+    <a class="item active">
+      Samples List
+    </a>
+    <a class="item" href="actor-list.html">
+      Actors List
+    </a>
+    <a class="item" href="manege-list.html">
+      Edit
+    </a>
+    <a class="item">
+      Contact
+    </a>
+    <div class="right menu">
+	  <div class="item">
+		<p style="font-family: '微软雅黑'; font-style: italic;">Administrator</p>
+	  </div>
+	  <a class="ui item" onclick="toggleLogin()">
+	    Logout
+	  </a>
+	</div>
+  </div>
+</div>
+<div class="ui container">
+	<!-- <div class="ui grid"> -->
+	<div class="ui hidden divider"></div>
+	<table id="example" class="display ui celled table selectable" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>MD5</th>
+                <th>情报标题</th>
+                <th>发布日期</th>
+                <th>情报来源</th>
+                <th>状态</th>
+                <th>TLP</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>MD5</th>
+                <th>情报标题</th>
+                <th>发布日期</th>
+                <th>情报来源</th>
+                <th>状态</th>
+                <th>TLP</th>
+                <th>操作</th>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="ui longer modal">
+      <i class="close icon"></i>
+      <div class="header">
+      DETAILS
+      </div>
+      <div class="scrolling content">
+        <div class="description ui grid">
+            <h3><i class="tags icon"></i><span id="m-title">Cisco WebEx Meeting Center URL重定向漏洞</span></h3>
+            <p>情报来源:　<span id="m-from">绿盟</span>　　　发布日期:　<span id="m-cdate">2017-11-30 18:00</span></br>
+            MD5:　<span id="m-md5">u23t4u3247d4839c7832kjnc98c8cf3</span></br></p>
+            <div class="ui divider"></div>
+            <div>
+                状态:　<div class="ui label inline-div" id="m-status">已更新</div>　　
+                TLP:　<div class="ui red label inline-div" id="m-tlp" >不可共享</div>　　
+                文档标签:　<div class="inline-div" id="m-labels">
+                    <!-- <span class="ui tag label">公开</span>
+                    <span class="ui tag label">安全漏洞</span> -->
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <h5><i class="file text outline icon"></i>文档摘要</h5>
+            <div class="ui segment">
+              <p id="m-abstract">服务端未对传入的跳转url变量进行检查和控制，可能导致可恶意构造任意一个恶意地址，诱导用户跳转到恶意网站。
+由于是从可信的站点跳转出去的，用户会比较信任，所以跳转漏洞一般用于钓鱼攻击，通过转到恶意网站欺骗用户输入用户名和密码盗取用户信息，或欺骗用户进行金钱交易；
+也可能引发的XSS漏洞（主要是跳转常常使用302跳转，即设置HTTP响应头，Locatioin: url，如果url包含了CRLF，则可能隔断了http响应头，使得后面部分落到了http body，从而导致xss漏洞）。</p>
+            </div>
+
+            <h5><i class="linkify icon"></i>文档URL</h5>
+            <div class="ui link list" id="m-urls">
+              <!-- <div class="item">
+                  <a><i class="plus circle icon" onclick="toggleUrlList(this)"></i></a>
+                  <a class="item" href="https://www.baidu.com/" target="_">https://www.baidu.com/</a>
+              </div>
+              <table class="ui celled compact padded table list-hidden">
+                  <thead>
+                    <tr><th>IOC_MD5</th>
+                    <th>IOC_URL</th>
+                    <th>IOC_DOMAIN</th>
+                    <th>IOC_IPV4</th>
+                    <th>Related Actors</th>
+                    <th>Related Reports</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="ui link list">
+                          <a class="item">About</a>
+                          <a class="item">Jobs</a>
+                          <a class="item">Team</a>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="ui link list">
+                          <a class="item">About</a>
+                          <a class="item">Jobs</a>
+                          <a class="item">Team</a>
+                        </div>
+                      </td>
+                      <td>
+                        
+                      </td>
+                      <td class="right aligned">
+                        
+                      </td>
+                      <td>
+
+                      </td>
+                      <td>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              <div class="item" id="url2">
+                  <a><i class="plus circle icon" id="2" onclick="toggleUrlList(this)"></i></a>
+                  <a class="item" href="https://www.baidu.com/" target="_">https://www.threatminer.org/</a>
+              </div> -->
+            </div>
+
+            <h5><i class="file text outline icon"></i>情报描述</h5>
+            <div class="ui segment" >
+              <p id="m-desc">恶意用户完全可以借用URL跳转漏洞来欺骗安全意识低的用户，从而导致“中奖”之类的欺诈，这对于一些有在线业务的企业如淘宝等，危害较大，同时借助URL跳转，也可以突破常见的基于“白名单方式”的一些安全限制，如传统IM里对于URL的传播会进行安全校验，但是对于大公司的域名及URL将直接允许通过并且显示会可信的URL，而一旦该URL里包含一些跳转漏洞将可能导致安全限制被绕过。</p>
+            </div>
+            
+            <h5><i class="spy icon"></i>相关Actors</h5>
+            <table id="Actor-table" class="display ui celled table" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Actor Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="m-names">
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+      <div class="actions">
+        <!-- <div class="ui black deny button">
+          Nope
+        </div>
+        <div class="ui positive right labeled icon button">
+          Yep, that's me
+          <i class="checkmark icon"></i>
+        </div> -->
+      </div>
+    </div>
+
+    <div class="login ui tiny modal">
+    <div class="content">
+        <div class="ui middle aligned center aligned grid">
+          <div class="column">
+            <h2 class="ui teal header">
+              <div class="content">
+                Log-in to your account
+              </div>
+            </h2>
+            <form class="ui large form">
+              <div class="ui segment">
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="user icon"></i>
+                    <input type="text" name="email" spellcheck="false" placeholder="E-mail address">
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input type="password" name="password" placeholder="Password">
+                  </div>
+                </div>
+                <div class="ui fluid large teal submit button">Login</div>
+              </div>
+
+              <div class="ui error message"></div>
+
+            </form>
+
+            <div class="ui message">
+              New to us? <a href="#">Sign Up</a>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var table = $('#example').DataTable(
+     {
+        "processing": true,
+        "paging": true,
+        "serverSide": true,
+        "ordering": false, // 禁止排序
+        "ajax": {
+            url: "http://127.0.0.1:8989/api",
+            type: 'POST'
+        },
+        "aoColumnDefs":[
+        // {"aTargets":[3],"mRender":function(data,type,full){
+        //              return "<a href=\"http://www.baidu.com/\" target=\"_\">"+data+"</a>    "}
+        //             },
+        {"aTargets":[6],"mRender":function(data,type,full){
+                     return "<a onclick=\"readOnlyDetails('"+full[0]+"');\" href='javascript:void(0)'><i class=\"info circle icon\"></i>详情</a>"}
+                    }]
+    }
+    );
+    // $('#example tbody').on("click","tr",function () {
+    //     var data = table.row(this).data();
+    //     alert(data);
+    // });
+    // table.search( 'software' );
+} );
+
+function assignDetails(data){
+    $('#m-title').text(data.report[1]);
+    $('#m-from').text(data.report[3]);
+    $('#m-cdate').text(data.report[2]);
+    $('#m-md5').text(data.report[0]);
+    $('#m-status').text(data.report[4]);
+
+    var tlp = "";
+    switch(data.report[5]){
+        case "0":
+          tlp = "不可共享"; break;
+        case "1":
+          tlp = "组织内共享"; break;
+        case "2":
+          tlp = "组织外限制共享"; break;
+        case "3":
+          tlp = "广泛共享"; break;
+        
+    }
+    tlpcolor(data.tlp);
+    $('#m-tlp').text(tlp);
+
+    $('#m-labels').empty();
+    var tags = data.labels.split(';');
+    console.log(tags);
+    for(item in tags){
+        alert(tags[item]);
+       $('#m-labels').append('<span class="ui tag label">'+tags[item]+'</span>'); 
+    }
+    $('#m-abstract').text(data.abstract);
+    $('#m-desc').text(data.desc);
+
+    var columns = [
+                    // "md5",
+                    "domains","ipv4"
+                    // ,"actors","reports"
+                    ];
+    var htmlcode = "";
+    for(item in data.urls){
+        
+        htmlcode += '<div class="item"> \
+                  <a><i class="plus circle icon" onclick="toggleUrlList(this)"></i></a> \
+                  <a class="item" href="'+data.urls[item].url+'" target="_">'+data.urls[item].url+'</a> \
+              </div>'; 
+        htmlcode += '<table class="ui celled compact padded table list-hidden"><thead><tr><th>IOC_MD5</th><th>IOC_DOMAIN</th><th>IOC_IPV4</th><th>Related Actors</th><th>Related Reports</th></tr></thead><tbody><tr>';
+        
+        htmlcode += '<td><div class="ui link list"><a class="item">'+'test text'
+        <!--data.urls[item]['md5']-->
+        +'</a></div></td>';
+        <!--for(var i=0; i<columns.length; i+=1){-->
+            <!--htmlcode += '<td><div class="ui link list">';-->
+            <!--console.log('-&#45;&#45;&#45;&#45;');-->
+            <!--// console.log(data.urls);-->
+            <!--for(j in data.urls[item][columns[i]]){-->
+                <!--// console.log(data.urls[item][columns[i]][j]);-->
+                <!--htmlcode += '<a class="item">'+data.urls[item][columns[i]][j]+'</a>';-->
+            <!--}-->
+            <!--htmlcode += '</div></td>';-->
+        <!--}-->
+        htmlcode += '<td><div class="ui link list"><a class="item">dsfsdf</a></div></td>';
+        htmlcode += '<td><div class="ui link list"><a class="item">sdfsdf</a></div></td>';
+        htmlcode += '<td><div class="ui link list"><a class="item">'+data.urls[item]['actors']+'</a></div></td>';
+        htmlcode += '<td><div class="ui link list"><a class="item">'+data.urls[item]['reports']+'</a></div></td>';
+        htmlcode += '</tr></tbody></table>\n';
+    }
+    $('#m-urls').empty();
+    $('#m-urls').append(htmlcode);
+
+    var table1 = $('#Actor-table').DataTable(
+     {
+        "destroy": true,
+        "data": [[data.actors]],
+        // "processing": true,
+        "bFilter": false,    //去掉搜索框方法
+        "paging": false,
+        "bLengthChange": false,   //去掉每页显示多少条数据方法
+        // "serverSide": true,
+        "ordering": false, // 禁止排序
+        // "ajax": {
+        //     url: "http://localhost//test/api.php",
+        //     type: 'POST'
+        // },
+        "aoColumnDefs":[
+        // {"aTargets":[0],"mRender":function(data,type,full){
+        //                 var actorname = '<div class="ui link list">';
+        //                 for(item in data){
+        //                    actorname += '<a class="item">'+data[item]+'</a>';
+        //                 }
+        //                 actorname += "</div>";
+        //                 return actorname;
+        //             }}
+                    ]
+    }
+    );
+    $('.longer.modal')
+      .modal({closable: false})
+      .modal('show')
+    ;
+
+}
+
+function readOnlyDetails(data){
+    // alert(data);
+    // 
+
+    $.ajax({
+      type: 'POST',
+      url: "http://127.0.0.1:8989/api/details",
+      data: {"md5":data},
+      success: function(data){
+        assignDetails(data);
+      },
+      dataType: "json"
+    });
+
+}
+
+function toggleLogin() {
+     $('.login.ui.tiny.modal')
+      .modal('show')
+    ;
+}
+
+function toggleUrlList(obj) {
+    $(obj).toggleClass('minus');
+    $(obj).toggleClass('plus');
+    $(obj).parent().parent('div').next().toggle();
+}
+
+function tlpcolor(val) {
+  var obj = $('#m-tlp');
+  switch(val){
+    case "0":
+      obj.toggleClass("red",true);
+      obj.toggleClass("orange",false);
+      obj.toggleClass("green",false);
+      obj.toggleClass("white",false); break;
+    case "1":
+      obj.toggleClass("red",false);
+      obj.toggleClass("orange",true);
+      obj.toggleClass("green",false);
+      obj.toggleClass("white",false); break;
+    case "2":
+      obj.toggleClass("red",false);
+      obj.toggleClass("orange",false);
+      obj.toggleClass("green",true);
+      obj.toggleClass("white",false); break;
+    case "3":
+      obj.toggleClass("red",false);
+      obj.toggleClass("orange",false);
+      obj.toggleClass("green",false);
+      obj.toggleClass("white",true); break;
+    
+  }
+}
+</script>
+</body>
+</html>

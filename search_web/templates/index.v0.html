@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>Search Page</title>
+    <script src="/static/js/jquery-1.10.2.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet " href="/static/css/bootstrap.min.css ">
+    <link rel="stylesheet " href="/static/css/style.css ">
+    <style type="text/css">
+        ul {
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+
+<body style="padding: 30px;">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">查询类型 <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href='#'>URL</a></li>
+                        <li role='separator' class="divider"></li>
+                        <li><a href='#'>IP</a></li>
+                        <li role='separator' class="divider"></li>
+                        <li><a href='#'>域名</a></li>
+                        <li role='separator' class="divider"></li>
+                        <li><a href='#'>文件哈希值</a></li>
+                    </ul>
+                </div>
+                <!-- /btn-group -->
+                <input type="text" class="form-control" id="search" placeholder="Searching...">
+            </div>
+            <!-- /input-group -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+
+    <ul class="list-group" style="margin-top:30px;" id="list-group">
+        <li>
+            <div class='panel panel-default'>
+                <div class="panel-heading">搜索结果</div>
+                <div class="panel-body">
+                    <ul class="list-group" style="margin-top:30px;" id="list-group">
+                        <ul>
+                            <li>
+                                <p>URL</p>
+                                <p>baidu.com</p>
+                            </li>
+                            <li>
+                                <p>Hash</p>
+                                <p>123kjasdhjxoaijsk</p>
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <script>
+        $(function() {
+            $('.dropdown-menu a').click(function() {
+                $('#list-group').empty();
+                var content = this.innerText;
+                var field = "url";
+                if (content == "IP") {
+                    field = "ip";
+                } else if (content == "文件哈希值") {
+                    field = "filehash";
+                } else if (content == "域名") {
+                    field = "domainName";
+                }
+                $.post("/search", {
+                        "field": field,
+                        "query": $('#search').val()
+                    },
+                    function(documents) {
+                        $Group = $('#list-group');
+                        $('#search-result').html("Search Count:" + documents.length.toString());
+                        for (i in documents) {
+                            var document = documents[i];
+                            $Group.append(
+                                `<li><divclass='panelpanel-default'><divclass="panel-heading">信息</div><divclass="panel-body"><ulclass="list-group"style="margin-top:30px;"id="list-group"><ul><li><p>URL</p><p>${document["url"]}</p></li><li><p>域名</p><p>${document["domainName"]}</p></li><li><p>IP</p><p>${document["ip"]}</p></li><li><p>文件哈希值</p><p>${document["filehash"]}</p></li></ul></ul></div></div></li>`
+                            );
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+</body>
+<html>

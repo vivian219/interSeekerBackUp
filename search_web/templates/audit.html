@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Semantic UI</title>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="static/semantic/dist/semantic.min.css">
+	<script type="text/javascript" src="static/semantic/dist/semantic.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.semanticui.min.js"></script>
+	<style type="text/css">
+		.bold {
+			font-weight: bold;
+			color: #2B2B2B;
+		}
+		.card-width {
+			width: 32% !important;
+		}
+	</style>
+</head>
+<body>
+<div class="ui inverted segment">
+  <div class="ui inverted secondary menu">
+  	<div class="item">
+  	   <img  src="static/images/icon1.png">
+       <a href="index.html"><span style="font-size: medium;">&nbsp;IntelTrackr</span> </a>
+	</div>
+    <a class="item" href="manege-list.html">
+      Info List
+    </a>
+    <a class="item" href="actor-list.html">
+      Actor List
+    </a>
+    <a class="item active">
+      Verify
+    </a>
+    <div class="right menu">
+	  <div class="item">
+		<p style="font-family: '微软雅黑'; font-style: italic;">Administrator</p>
+	  </div>
+	  <a class="ui item">
+	    Logout
+	  </a>
+	</div>
+  </div>
+</div>
+<div class="ui container">
+	<div class="ui grid">
+		<!-- <div class="row">
+			<div class="ui hidden divider"></div>
+		</div> -->
+		<div class="row">
+			<div class="four wide column left floated">
+				<div class="ui floating labeled icon dropdown button" id="auditclass">
+				  <i class="filter icon"></i>
+				  <span class="text">筛选</span>
+				  <div class="menu">
+				    <div class="header">
+				      状态类别
+				    </div>
+				    <div class="item">
+				      <div class="ui blue empty circular label"></div>
+				      已更新
+				    </div>
+				    <div class="item">
+				      <div class="ui black empty circular label"></div>
+				      已回收
+				    </div>
+				    <div class="item">
+				      <div class="ui green empty circular label"></div>
+				      已发布
+				    </div>
+				    <div class="item">
+				      <div class="ui orange empty circular label"></div>
+				      待审核
+				    </div>
+				  </div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				$('#auditclass').dropdown();
+			</script>
+			<div class="right floated four wide column">
+				<div class="ui action input ">
+				  <input type="text" placeholder="请输入关键字...">
+				  <button class="ui button">查找</button>
+				</div>
+			</div>
+		</div>
+		<div class="ui cards row">
+		  <div class="card card-width">
+		    <div class="content">
+		      <img class="left floated mini ui image" src="static/images/publish.png">
+		      <div class="header">
+		        20170826监控到的网页仿冒URL
+		      </div>
+		      <div class="meta">
+		        发布时间:　<span class="bold">2017-10-12 00:00:00</span></br>
+		        更新时间:　<span class="bold">2017-10-12 00:00:00</span>
+		      </div>
+		      <div class="description">
+		        <div class="ui labels">
+				  <a class="ui label">
+				    公开
+				  </a>
+				  <a class="ui label">
+				    网页冒仿
+				  </a>
+				</div>
+		      </div>
+		    </div>
+		    <div class="extra content">
+		      <div class="ui three buttons">
+		        <div class="ui basic green button" onclick="readOnlyDetails()">查看</div>
+		        <div class="ui basic red button" onclick="delCard(this)">删除</div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card card-width">
+		    <div class="content">
+		      <img class="left floated mini ui image" src="static/images/update.png">
+		      <div class="header">
+		        20170826监控到的网页仿冒URL1
+		      </div>
+		      <div class="meta">
+		        发布时间:　<span class="bold">2017-10-12 00:00:00</span></br>
+		        更新时间:　<span class="bold">2017-10-12 00:00:00</span>
+		      </div>
+		      <div class="description">
+		        <div class="ui labels">
+				  <a class="ui label">
+				    公开
+				  </a>
+				  <a class="ui label">
+				    网页冒仿
+				  </a>
+				</div>
+		      </div>
+		    </div>
+		    <div class="extra content">
+		      <div class="ui three buttons">
+		        <div class="ui basic green button">查看</div>
+		        <div class="ui basic red button" onclick="delCard(this)">删除</div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card card-width">
+		    <div class="content">
+		      <img class="left floated mini ui image" src="static/images/review.png">
+		      <div class="header">
+		        20170826监控到的网页仿冒URL2
+		      </div>
+		      <div class="meta">
+		        发布时间:　<span class="bold">2017-10-12 00:00:00</span></br>
+		        更新时间:　<span class="bold">2017-10-12 00:00:00</span>
+		      </div>
+		      <div class="description">
+		        <div class="ui labels">
+				  <a class="ui label">
+				    公开
+				  </a>
+				  <a class="ui label">
+				    网页冒仿
+				  </a>
+				</div>
+		      </div>
+		    </div>
+		    <div class="extra content">
+		      <div class="ui three buttons">
+		        <div class="ui basic green button">通过</div>
+		        <div class="ui basic red button" onclick="delCard(this)">删除</div>
+		        <div class="ui basic orange button">打回</div>
+		      </div>
+		    </div>
+		  </div>
+			<div class="card card-width">
+		    <div class="content">
+		      <img class="left floated mini ui image" src="static/images/dismiss.png">
+		      <div class="header">
+		        20170826监控到的网页仿冒URL
+		      </div>
+		      <div class="meta">
+		        发布时间:　<span class="bold">2017-10-12 00:00:00</span></br>
+		        更新时间:　<span class="bold">2017-10-12 00:00:00</span>
+		      </div>
+		      <div class="description">
+		        <div class="ui labels">
+				  <a class="ui label">
+				    公开
+				  </a>
+				  <a class="ui label">
+				    网页冒仿
+				  </a>
+				</div>
+		      </div>
+		    </div>
+		    <div class="extra content">
+		      <div class="ui three buttons">
+		        <!-- <div class="ui basic green button">更新</div> -->
+		        <div class="ui basic orange button">恢复</div>
+		        <div class="ui basic red button" onclick="delCard(this)">彻底删除</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<div class="ui segment secondary centered row">
+			<a href="javascript:void(0)" onclick="readOnlyDetails('66029002775c24ed3287fa6b1cc175b9')">加载更多</a>
+		</div>
+	</div>
+</div>
+
+<div class="ui details longer modal">
+      <i class="close icon"></i>
+      <div class="header">
+      DETAILS
+      </div>
+      <div class="scrolling content">
+        <div class="description ui grid">
+            <h3><i class="tags icon"></i><span id="m-title">Cisco WebEx Meeting Center URL重定向漏洞</span></h3>
+            <p>情报来源:　<span id="m-from">绿盟</span>　　　发布日期:　<span id="m-cdate">2017-11-30 18:00</span></br>
+            MD5:　<span id="m-md5">u23t4u3247d4839c7832kjnc98c8cf3</span></br></p>
+            <div class="ui divider"></div>
+            <div>
+                状态:　<div class="ui label inline-div" id="m-status">已更新</div>　　
+                TLP:　<div class="ui red label inline-div" id="m-tlp" >不可共享</div>　　
+                文档标签:　<div class="inline-div" id="m-labels">
+                    <!-- <span class="ui tag label">公开</span>
+                    <span class="ui tag label">安全漏洞</span> -->
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <h5><i class="file text outline icon"></i>文档摘要</h5>
+            <div class="ui segment">
+              <p id="m-abstract">服务端未对传入的跳转url变量进行检查和控制，可能导致可恶意构造任意一个恶意地址，诱导用户跳转到恶意网站。
+由于是从可信的站点跳转出去的，用户会比较信任，所以跳转漏洞一般用于钓鱼攻击，通过转到恶意网站欺骗用户输入用户名和密码盗取用户信息，或欺骗用户进行金钱交易；
+也可能引发的XSS漏洞（主要是跳转常常使用302跳转，即设置HTTP响应头，Locatioin: url，如果url包含了CRLF，则可能隔断了http响应头，使得后面部分落到了http body，从而导致xss漏洞）。</p>
+            </div>
+
+            <h5><i class="linkify icon"></i>文档URL</h5>
+            <div class="ui link list" id="m-urls">
+              <!-- <div class="item">
+                  <a><i class="plus circle icon" onclick="toggleUrlList(this)"></i></a>
+                  <a class="item" href="https://www.baidu.com/" target="_">https://www.baidu.com/</a>
+              </div>
+              <table class="ui celled compact padded table list-hidden">
+                  <thead>
+                    <tr><th>IOC_MD5</th>
+                    <th>IOC_URL</th>
+                    <th>IOC_DOMAIN</th>
+                    <th>IOC_IPV4</th>
+                    <th>Related Actors</th>
+                    <th>Related Reports</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="ui link list">
+                          <a class="item">About</a>
+                          <a class="item">Jobs</a>
+                          <a class="item">Team</a>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="ui link list">
+                          <a class="item">About</a>
+                          <a class="item">Jobs</a>
+                          <a class="item">Team</a>
+                        </div>
+                      </td>
+                      <td>
+                        
+                      </td>
+                      <td class="right aligned">
+                        
+                      </td>
+                      <td>
+
+                      </td>
+                      <td>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              <div class="item" id="url2">
+                  <a><i class="plus circle icon" id="2" onclick="toggleUrlList(this)"></i></a>
+                  <a class="item" href="https://www.baidu.com/" target="_">https://www.threatminer.org/</a>
+              </div> -->
+            </div>
+
+            <h5><i class="file text outline icon"></i>情报描述</h5>
+            <div class="ui segment" >
+              <p id="m-desc">恶意用户完全可以借用URL跳转漏洞来欺骗安全意识低的用户，从而导致“中奖”之类的欺诈，这对于一些有在线业务的企业如淘宝等，危害较大，同时借助URL跳转，也可以突破常见的基于“白名单方式”的一些安全限制，如传统IM里对于URL的传播会进行安全校验，但是对于大公司的域名及URL将直接允许通过并且显示会可信的URL，而一旦该URL里包含一些跳转漏洞将可能导致安全限制被绕过。</p>
+            </div>
+            
+            <h5><i class="spy icon"></i>相关Actors</h5>
+            <table id="Actor-table" class="display ui celled table" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Actor Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="m-names">
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+      <div class="actions">
+        <!-- <div class="ui black deny button">
+          Nope
+        </div>
+        <div class="ui positive right labeled icon button">
+          Yep, that's me
+          <i class="checkmark icon"></i>
+        </div> -->
+      </div>
+    </div>
+
+<script type="text/javascript">
+
+function delCard(obj){
+	// console.log($(obj).parent(".del"));
+	// $(obj).parent().parent().parent().remove();
+}
+
+
+function assignDetails(data){
+    $('#m-title').text(data.title);
+    $('#m-from').text(data.from);
+    $('#m-cdate').text(data.cdate);
+    $('#m-md5').text(data.md5);
+    $('#m-status').text(data.status);
+
+    var tlp = "";
+    switch(data.tlp){
+        case "0":
+          tlp = "不可共享"; break;
+        case "1":
+          tlp = "组织内共享"; break;
+        case "2":
+          tlp = "组织外限制共享"; break;
+        case "3":
+          tlp = "广泛共享"; break;
+        
+    }
+    $('#m-tlp').text(tlp);
+
+    $('#m-labels').empty();
+    for(item in data.labels){
+       $('#m-labels').append('<span class="ui tag label">'+data.labels[item]+'</span>'); 
+    }
+    $('#m-abstract').text(data.abstract);
+    $('#m-desc').text(data.desc);
+
+    var columns = ["md5","urls","domains","ipv4","actors","reports"];
+    var htmlcode = "";
+    for(item in data.urls){
+        
+        htmlcode += '<div class="item"> \
+                  <a><i class="plus circle icon" onclick="toggleUrlList(this)"></i></a> \
+                  <a class="item" href="'+data.urls[item].url+'" target="_">'+data.urls[item].url+'</a> \
+              </div>'; 
+        htmlcode += '<table class="ui celled compact padded table list-hidden"><thead><tr><th>IOC_MD5</th><th>IOC_URL</th><th>IOC_DOMAIN</th><th>IOC_IPV4</th><th>Related Actors</th><th>Related Reports</th></tr></thead><tbody><tr>';
+        
+        for(var i=0; i<6; i+=1){
+            htmlcode += '<td><div class="ui link list">';
+            console.log('-----');
+            // console.log(data.urls);
+            for(j in data.urls[item][columns[i]]){
+                // console.log(data.urls[item][columns[i]][j]);
+                htmlcode += '<a class="item">'+data.urls[item][columns[i]][j]+'</a>';
+            }
+            htmlcode += '</div></td>';
+        }
+        htmlcode += '</tr></tbody></table>\n';
+    }
+    $('#m-urls').empty();
+    $('#m-urls').append(htmlcode);
+
+    var table1 = $('#Actor-table').DataTable(
+     {
+        "destroy": true,
+        "data": [[data.actors.name]],
+        // "processing": true,
+        "bFilter": false,    //去掉搜索框方法
+        "paging": false,
+        "bLengthChange": false,   //去掉每页显示多少条数据方法
+        // "serverSide": true,
+        "ordering": false, // 禁止排序
+        // "ajax": {
+        //     url: "http://localhost//test/api.php",
+        //     type: 'POST'
+        // },
+        "aoColumnDefs":[{"aTargets":[0],"mRender":function(data,type,full){
+                        var actorname = '<div class="ui link list">';
+                        for(item in data){
+                           actorname += '<a class="item">'+data[item]+'</a>';
+                        }
+                        actorname += "</div>";
+                        return actorname;
+                    }}]
+    }
+    );
+    $('.longer.details.modal')
+      .modal({closable: false})
+      .modal('show')
+    ;
+
+}
+
+function readOnlyDetails(data){
+    // alert(data);
+    // 
+ 
+
+    $.ajax({
+      type: 'POST',
+      url: "http://127.0.0.1:8989/api/details",
+      data: {"md5": data},
+      success: function(data){
+        assignDetails(data);
+      },
+      dataType: "json"
+    });
+
+}
+</script>
+</body>
+</html>
